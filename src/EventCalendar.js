@@ -19,13 +19,13 @@ export default class EventCalendar extends React.Component {
     super(props)
     this.styles = styleConstructor(props.styles)
     this.state = {
-      date: moment(this.props.initDate),
       index: this.props.size
     }
   }
 
   static defaultProps = {
     size: 30,
+    date: moment(this.props.initDate),
     initDate: new Date(),
     formatHeader: 'DD MMMM YYYY'
   }
@@ -70,7 +70,8 @@ export default class EventCalendar extends React.Component {
     }
     const date = moment(this.props.initDate).add(index - this.props.size, 'days')
     this.refs.calendar.scrollToIndex({ index, animated: false })
-    this.setState({ index, date })
+    this.props.date = date;
+    this.setState({ index })
   }
 
   render() {
@@ -109,7 +110,8 @@ export default class EventCalendar extends React.Component {
           onMomentumScrollEnd={(event) => {
             const index = parseInt(event.nativeEvent.contentOffset.x / width)
             const date = moment(this.props.initDate).add(index - this.props.size, 'days')
-            this.setState({ index, date })
+            this.setState({ index })
+            this.props.date = date
           }}
           {...virtualizedListProps}
         />
